@@ -41,6 +41,7 @@ export class UPlotChart extends Component<PlotProps, UPlotChartState> {
     let { width, height, plotRef } = this.props;
 
     this.plotInstance?.destroy();
+    this.plotInstance = null;
 
     if (width === 0 && height === 0) {
       return;
@@ -78,7 +79,8 @@ export class UPlotChart extends Component<PlotProps, UPlotChartState> {
   }
 
   componentDidUpdate(prevProps: PlotProps) {
-    if (!sameConfig(prevProps, this.props)) {
+    // also (re)create the plot when it was skipped at mount because the chart had no size yet
+    if (!sameConfig(prevProps, this.props) || !this.plotInstance) {
       this.reinitPlot();
       return;
     }
