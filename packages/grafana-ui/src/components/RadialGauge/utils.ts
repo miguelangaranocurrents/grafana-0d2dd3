@@ -34,8 +34,8 @@ export function getFieldDisplayProcessor(displayValue: FieldDisplay) {
 }
 
 export function getFieldConfigMinMax(fieldDisplay: FieldDisplay) {
-  let min = fieldDisplay.field.min ?? 0;
-  let max = fieldDisplay.field.max ?? 100;
+  let min = Number(fieldDisplay.field.min ?? 0);
+  let max = Number(fieldDisplay.field.max ?? 100);
 
   // If min and max are equal (can happen for single value fields or if all values are the same)
   // Then we need to adjust them a bit to avoid division by zero
@@ -300,8 +300,9 @@ export function getFormattedThresholds(
   const isPercent = thresholds.mode === ThresholdsMode.Percentage;
   const steps = thresholds.steps;
 
-  let min = field.min ?? GAUGE_DEFAULT_MINIMUM;
-  let max = field.max ?? GAUGE_DEFAULT_MAXIMUM;
+  // min/max can be computed from values that were not normalized to numbers (e.g. numeric strings)
+  let min = Number(field.min ?? GAUGE_DEFAULT_MINIMUM);
+  let max = Number(field.max ?? GAUGE_DEFAULT_MAXIMUM);
 
   if (isPercent) {
     min = 0;
